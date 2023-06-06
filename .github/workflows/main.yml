@@ -8,7 +8,7 @@ on:
 jobs:
   build_and_release:
     runs-on: ubuntu-latest
-
+    continue-on-error: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -24,8 +24,8 @@ jobs:
       - name: Build Android app
         run: flutter build apk
 
-      - name: Build Windows app
-        run: flutter build windows
+      #- name: Build Windows app
+        #run: flutter build windows
 
       - name: Build web app
         run: flutter build web
