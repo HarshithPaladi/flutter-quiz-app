@@ -1,5 +1,5 @@
 # flutter01
-
+[![Flutter Build & Release](https://github.com/HarshithPaladi/flutter-quiz-app/actions/workflows/main.yml/badge.svg)](https://github.com/HarshithPaladi/flutter-quiz-app/actions/workflows/main.yml)  
 A new Flutter project.
 
 ## Getting Started
