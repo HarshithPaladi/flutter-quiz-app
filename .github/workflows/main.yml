@@ -1,4 +1,4 @@
-name: Build, Release & Deploy
+name: Flutter Build, Release & Deploy
 
 on:
   push:
@@ -10,67 +10,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.3'  # Specify the Flutter version you want to use
-
-      - name: Clean Flutter project
-        run: flutter clean
+          flutter-version: '3.10.3'  # Replace with desired Flutter version
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build Android app
-        run: flutter build apk
+      - name: Build Android and web releases
+        run: flutter build apk --release && flutter build web --release
 
-      #- name: Build iOS app
-        #run: flutter build ios
-
-      #- name: Build Windows app
-        #run: flutter build windows
-
-      - name: Build web app
-        run: flutter build web
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Git
-        run: |
-          git config --global user.name ${{ vars.NAME }}
-          git config --global user.email ${{ vars.MAIL }}
-
-      - name: Create Release
+      - name: Create GitHub Release
         id: create_release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            ./build/app/outputs/flutter-apk/app-release.apk
-          #./build/ios/iphoneos/Runner.app
-          #./build/windows/runner/Runner.exe
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
 
+      - name: Upload Android APK
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/app/outputs/flutter-apk/app-release.apk
+          asset_name: app-release.apk
+          asset_content_type: application/vnd.android.package-archive
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Deploy to GitHub Pages
+      - name: Upload Web Build
         uses: peaceiris/actions-gh-pages@v3
         with:
-          personal_token: ${{ secrets.ACCESS_TOKEN }}
+          github_token: ${{ secrets.ACCESS_TOKEN }}
           publish_dir: build/web
+
