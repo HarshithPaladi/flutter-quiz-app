@@ -24,9 +24,6 @@ jobs:
       - name: Build Android app
         run: flutter build apk
 
-      - name: Build iOS app
-        run: flutter build ios
-
       - name: Build Windows app
         run: flutter build windows
 
@@ -44,7 +41,6 @@ jobs:
         with:
           files: |
             ./build/app/outputs/flutter-apk/app-release.apk
-            ./build/ios/iphoneos/Runner.app
             ./build/windows/runner/Runner.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
