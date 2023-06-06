@@ -18,11 +18,14 @@ jobs:
         with:
           flutter-version: '3.10.3'  # Specify the Flutter version you want to use
 
+      - name: Flutter clean
+        run: flutter clean
+
       - name: Install dependencies
         run: flutter pub get
 
-      #- name: Build Android app
-        #run: flutter build apk
+      - name: Build Android app
+        run: flutter build apk
 
       #- name: Build Windows app
         #run: flutter build windows
@@ -30,17 +33,15 @@ jobs:
       - name: Build web app
         run: flutter build web
 
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
-        with:
-          branch: gh-pages
-          folder: build/web
+      #- name: Deploy to GitHub Pages
+        #uses: actions/deploy-pages@v2
+        #with:
+          #branch: gh-pages
+          #folder: build/web
 
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             ./build/app/outputs/flutter-apk/app-release.apk
-            ./build/windows/runner/Runner.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          #./build/windows/runner/Runner.exe
