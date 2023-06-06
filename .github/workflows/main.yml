@@ -21,17 +21,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Extract Tag
-        id: extract_tag
-        run: echo "::set-output name=tag::${{ github.ref }}"
-
-      - name: Set App Version
-        id: set_app_version
-        run: echo "::set-output name=version::${{ steps.extract_tag.outputs.tag }}"
-
       - name: Build Android and web releases
         run: |
-          flutter build apk --release --build-name=${{ steps.set_app_version.outputs.version }} --build-number=${{ steps.set_app_version.outputs.version }}
+          flutter build apk --release --build-name=${{ github.ref_name }} --build-number=${{ github.run_number }}
           flutter build web --release --base-href "/${{ github.event.repository.name }}/"
 
       - name: Create GitHub Release
