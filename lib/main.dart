@@ -18,7 +18,6 @@ class _MyAppState extends State<MyApp> {
   var score = 0;
   var quizCompleted = false;
 
-  // Create a list of maps with key-value pairs of question and answers and correct answer
   var QnA = [
     {
       'question': "What is the capital of India?",
